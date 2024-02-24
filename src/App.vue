@@ -1,26 +1,46 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <v-app>
+    <v-app-bar
+      :elevation="5"
+      app
+      color="#001e8c"
+      dark
+      :scroll-target="$vuetify"
+      :scroll-threshold="100"
+    >
+      <div class="d-flex align-center">
+        <v-img
+          :src="require('@/assets/logo.png')"
+          alt="Logo"
+          contain
+          max-height="40"
+          max-width="40"
+          class="logo"
+        ></v-img>
+        <v-app-bar-title>Tunisie Telecom</v-app-bar-title>
+      </div>
+    </v-app-bar>
+    <AppFooter></AppFooter>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import AppFooter from "@/components/AppFooter.vue";
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    AppFooter,
+  },
+  data() {
+    return {
+      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin"], // Add your social media icons
+    };
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+.bg-indigo-lighten-1 {
+  background-color: #001e8c;
+  color: white;
 }
 </style>
