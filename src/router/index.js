@@ -5,13 +5,13 @@ import AppForm from "@/components/AppForm.vue"; // Update the path based on your
 const routes = [
   {
     path: "/",
-    name: "AppHome",
-    component: AppHome,
+    name: "Home",
+    components: {default:AppHome,},
   },
   {
     path: "/form",
-    name: "AppForm",
-    component: AppForm,
+    name: "Form",
+    components: {default:AppForm,},
   },
   // Add more routes as needed
 ];

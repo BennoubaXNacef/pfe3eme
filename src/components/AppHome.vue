@@ -117,7 +117,7 @@ export default {
   name: "AppHome",
   methods: {
     goToForm() {
-      this.$router.push({ name: "AppForm" });
+      this.$router.push({ name: "Form" });
     },
   },
 };

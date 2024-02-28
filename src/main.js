@@ -17,4 +17,5 @@ app.use(vuetify);
 app.use(router);
 
 // Mount the app
-app.mount("#app");
+app.use(vuetify).mount("#app");
+

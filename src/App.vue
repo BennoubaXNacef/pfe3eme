@@ -13,20 +13,19 @@
     </v-app-bar>
 
     <!-- Main Content (AppHome) -->
-    <app-home></app-home>
-
+  <!-- Main Content (Routed Components) -->
+  <router-view></router-view>
     <!-- Footer -->
     <app-footer></app-footer>
   </v-app>
 </template>
 
 <script>
-import AppHome from "@/components/AppHome.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 export default {
   components: {
-    AppHome,
+  
     AppFooter,
   },
 };
