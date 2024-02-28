@@ -1,42 +1,40 @@
 <template>
+  <!-- App Bar -->
   <v-app>
-    <v-app-bar
-      :elevation="5"
-      app
-      color="#001e8c"
-      dark
-      :scroll-target="$vuetify"
-      :scroll-threshold="100"
-    >
-      <div class="d-flex align-center">
-        <v-img
-          :src="require('@/assets/logo.png')"
-          alt="Logo"
-          contain
-          max-height="40"
-          max-width="40"
-          class="logo"
-        ></v-img>
-        <v-app-bar-title>Tunisie Telecom</v-app-bar-title>
-      </div>
+    <v-app-bar app color="#001e8c" dark :elevation="5">
+      <v-img
+        :src="require('@/assets/logott.png')"
+        alt="Logo"
+        max-height="40"
+        max-width="40"
+        class="logo"
+      ></v-img>
+      <v-app-bar-title>Tunisie Telecom</v-app-bar-title>
     </v-app-bar>
-    <AppFooter></AppFooter>
+
+    <!-- Main Content (AppHome) -->
+    <app-home></app-home>
+
+    <!-- Footer -->
+    <app-footer></app-footer>
   </v-app>
 </template>
 
 <script>
+import AppHome from "@/components/AppHome.vue";
 import AppFooter from "@/components/AppFooter.vue";
+
 export default {
   components: {
+    AppHome,
     AppFooter,
-  },
-  data() {
-    return {
-      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin"], // Add your social media icons
-    };
   },
 };
 </script>
+
+<style scoped>
+/* Add scoped styles here */
+</style>
 
 <style scoped>
 .bg-indigo-lighten-1 {

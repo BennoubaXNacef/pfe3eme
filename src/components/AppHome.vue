@@ -116,7 +116,9 @@
 export default {
   name: "AppHome",
   methods: {
-    // Use Vue Router's push method to navigate
+    goToForm() {
+      this.$router.push({ name: "AppForm" });
+    },
   },
 };
 </script>
@@ -145,9 +147,10 @@ export default {
 }
 .custom-padding {
   padding-top: 20px;
+  color: #ffffff;
 }
 .custom-card-text {
-  margin-top: -25px; /* Adjust the value for less space */
+  margin-top: -5px; /* Adjust the value for less space */
   color: #ffffff !important;
   opacity: 0.8;
 }
