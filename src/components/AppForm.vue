@@ -3,10 +3,12 @@
   <br />
   <br />
   <v-container>
+    <v-row class="justify-center">
     <h1>Fiche de renseignement</h1>
-
+  </v-row>
+    <v-sheet class="mx-auto" width="1200">
     <!-- Form -->
-    <v-form v-model="valid" @submit.prevent="submitForm" ref="form">
+    <v-form fast-fail v-model="valid" @submit.prevent="submitForm" ref="form">
       <!-- Nom & Prénom -->
       <v-row>
         <v-col
@@ -16,9 +18,8 @@
           <v-text-field
             v-model="lastname"
             :counter="10"
-            :rules="nameRules"
+            :rules="lastNameRules"
             label="Nom"
-            hide-details
             required
           ></v-text-field>
         </v-col>
@@ -30,9 +31,8 @@
           <v-text-field
             v-model="firstname"
             :counter="10"
-            :rules="nameRules"
+            :rules="firstNameRules"
             label="Prénom"
-            hide-details
             required
           ></v-text-field>
         </v-col>
@@ -45,12 +45,11 @@
             v-model="email"
             :rules="emailRules"
             label="E-mail"
-            hide-details
             required
           ></v-text-field>
         </v-col>
       </v-row>
-
+    <br>
       <!-- N° CIN / Passeport -->
       <v-text-field
         v-model="formData.idNumber"
@@ -118,9 +117,10 @@
 
       <!-- Submit Button -->
       <v-row class="justify-end">
-      <v-btn type="submit">Submit</v-btn>
+      <v-btn type="submit" >Submit</v-btn>
     </v-row>
     </v-form>
+  </v-sheet>
   </v-container>
 </template>
 
@@ -129,7 +129,8 @@ export default {
   data() {
     return {
       formData: {
-        fullName: "",
+        Nom:"",
+        Prénom:"",
         idNumber: "",
         institut: "",
         diplome: "",
@@ -169,7 +170,22 @@ export default {
         "Ingénieur",
         "Alternance",
       ],
+      firstNameRules: [
+        value => {
+          if (/[^0-9]/.test(value)) return true
+
+          return 'First name can not contain digits.'
+        },
+      ],
+      lastNameRules: [
+        value => {
+          if (/[^0-9]/.test(value)) return true
+
+          return 'Last name can not contain digits.'
+        },
+      ],
     };
+    
   },
   computed: {
     idNumberRules() {
@@ -217,5 +233,10 @@ export default {
 .justify-end {
   justify-content: flex-end;
 }
+.justify-center{
+  justify-content: center;
+}
+
+
 /* Add scoped styles here */
 </style>
