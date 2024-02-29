@@ -8,11 +8,48 @@
     <!-- Form -->
     <v-form v-model="valid" @submit.prevent="submitForm" ref="form">
       <!-- Nom & Prénom -->
-      <v-text-field
-        v-model="formData.fullName"
-        label="Nom & Prénom"
-        required
-      ></v-text-field>
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-text-field
+            v-model="lastname"
+            :counter="10"
+            :rules="nameRules"
+            label="Nom"
+            hide-details
+            required
+          ></v-text-field>
+        </v-col>
+
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-text-field
+            v-model="firstname"
+            :counter="10"
+            :rules="nameRules"
+            label="Prénom"
+            hide-details
+            required
+          ></v-text-field>
+        </v-col>
+
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            label="E-mail"
+            hide-details
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
 
       <!-- N° CIN / Passeport -->
       <v-text-field
