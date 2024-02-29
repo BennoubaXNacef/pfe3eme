@@ -6,7 +6,7 @@
     <h1>Fiche de renseignement</h1>
 
     <!-- Form -->
-    <v-form @submit.prevent="submitForm" ref="form">
+    <v-form v-model="valid" @submit.prevent="submitForm" ref="form">
       <!-- Nom & Prénom -->
       <v-text-field
         v-model="formData.fullName"
@@ -18,6 +18,7 @@
       <v-text-field
         v-model="formData.idNumber"
         label="N° CIN / Passeport"
+        :rules="idNumberRules"
         required
       ></v-text-field>
 
@@ -58,6 +59,7 @@
       <v-text-field
         v-model="formData.tel"
         label="Tél du stagiaire"
+        :rules="idNumberRules2"
         required
       ></v-text-field>
 
@@ -78,7 +80,9 @@
       ></v-select>
 
       <!-- Submit Button -->
+      <v-row class="justify-end">
       <v-btn type="submit">Submit</v-btn>
+    </v-row>
     </v-form>
   </v-container>
 </template>
@@ -130,6 +134,20 @@ export default {
       ],
     };
   },
+  computed: {
+    idNumberRules() {
+      return [
+        value => !!value || "Ce champ est requis",
+        value => /^([0-9]{8})$/.test(value) || "Le format du N°CIN/Passeport est invalide",
+      ];
+    },
+    idNumberRules2() {
+      return [
+        value => !!value || "Ce champ est requis",
+        value => /^([0-9]{9})$/.test(value) || "Le N°Telephone est invalide",
+      ];
+    },
+  },
   methods: {
     submitForm() {
       // Check if the form is valid
@@ -159,5 +177,8 @@ export default {
 </script>
 
 <style scoped>
+.justify-end {
+  justify-content: flex-end;
+}
 /* Add scoped styles here */
 </style>
