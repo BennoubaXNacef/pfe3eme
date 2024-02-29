@@ -1,7 +1,6 @@
 <template>
   <br />
   <br />
-  <br />
   <div class="bg-container section">
     <v-carousel>
       <v-carousel-item
