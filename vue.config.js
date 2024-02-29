@@ -11,5 +11,11 @@ module.exports = {
 
   chainWebpack: (config) => {
     config.resolve.alias.set("@", path.resolve(__dirname, "src"));
+
+    config.plugin("define").tap((args) => {
+      args[0].__VUE_PROD_DEVTOOLS__ = "false";
+      args[0].__VUE_PROD_MISMATCH__ = "false";
+      return args;
+    });
   },
 };

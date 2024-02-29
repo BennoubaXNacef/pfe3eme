@@ -1,43 +1,81 @@
 <template>
+  <br />
+  <br />
+  <br />
   <v-container>
-
     <h1>Fiche de renseignement</h1>
 
     <!-- Form -->
     <v-form @submit.prevent="submitForm" ref="form">
       <!-- Nom & Prénom -->
-      <v-text-field v-model="formData.fullName" label="Nom & Prénom" required></v-text-field>
+      <v-text-field
+        v-model="formData.fullName"
+        label="Nom & Prénom"
+        required
+      ></v-text-field>
 
       <!-- N° CIN / Passeport -->
-      <v-text-field v-model="formData.idNumber" label="N° CIN / Passeport" required></v-text-field>
+      <v-text-field
+        v-model="formData.idNumber"
+        label="N° CIN / Passeport"
+        required
+      ></v-text-field>
 
       <!-- Institut -->
       <v-text-field v-model="formData.institut" label="Institut"></v-text-field>
 
       <!-- Diplôme visé -->
-      <v-text-field v-model="formData.diplome" label="Diplôme visé"></v-text-field>
+      <v-text-field
+        v-model="formData.diplome"
+        label="Diplôme visé"
+      ></v-text-field>
 
       <!-- Spécialité -->
-      <v-text-field v-model="formData.specialite" label="Spécialité"></v-text-field>
+      <v-text-field
+        v-model="formData.specialite"
+        label="Spécialité"
+      ></v-text-field>
 
       <!-- Date début & date fin de stage -->
       <v-row>
         <v-col cols="6">
-          <v-date-picker v-model="formData.startDate" label="Date début de stage" required></v-date-picker>
+          <v-date-picker
+            v-model="formData.startDate"
+            label="Date début de stage"
+            required
+          ></v-date-picker>
         </v-col>
         <v-col cols="6">
-          <v-date-picker v-model="formData.endDate" label="Date fin de stage" required></v-date-picker>
+          <v-date-picker
+            v-model="formData.endDate"
+            label="Date fin de stage"
+            required
+          ></v-date-picker>
         </v-col>
       </v-row>
 
       <!-- Tél du stagiaire -->
-      <v-text-field v-model="formData.tel" label="Tél du stagiaire" required></v-text-field>
+      <v-text-field
+        v-model="formData.tel"
+        label="Tél du stagiaire"
+        required
+      ></v-text-field>
 
       <!-- Lieu de stage -->
-      <v-select v-model="formData.lieuStage" :items="lieuStageOptions" label="Lieu de stage" required></v-select>
+      <v-select
+        v-model="formData.lieuStage"
+        :items="lieuStageOptions"
+        label="Lieu de stage"
+        required
+      ></v-select>
 
       <!-- Type de stage -->
-      <v-select v-model="formData.typeStage" :items="typeStageOptions" label="Type de stage" required></v-select>
+      <v-select
+        v-model="formData.typeStage"
+        :items="typeStageOptions"
+        label="Type de stage"
+        required
+      ></v-select>
 
       <!-- Submit Button -->
       <v-btn type="submit">Submit</v-btn>
@@ -82,7 +120,14 @@ export default {
         "ULS Gabès",
         "ULS Zrig",
       ],
-      typeStageOptions: ["Initiation", "Perfectionnement", "Ouvrier", "Technicien", "Ingénieur", "Alternance"],
+      typeStageOptions: [
+        "Initiation",
+        "Perfectionnement",
+        "Ouvrier",
+        "Technicien",
+        "Ingénieur",
+        "Alternance",
+      ],
     };
   },
   methods: {

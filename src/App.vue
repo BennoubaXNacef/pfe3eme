@@ -1,5 +1,4 @@
 <template>
-  <!-- App Bar -->
   <v-app>
     <v-app-bar app color="#001e8c" dark :elevation="5">
       <v-img
@@ -12,28 +11,41 @@
       <v-app-bar-title>Tunisie Telecom</v-app-bar-title>
     </v-app-bar>
 
-    <!-- Main Content (AppHome) -->
-  <!-- Main Content (Routed Components) -->
-  <router-view></router-view>
+    <!-- Main Content (Routed Components) -->
+    <router-view></router-view>
+
     <!-- Footer -->
-    <app-footer></app-footer>
+    <v-footer class="bg-indigo-lighten-1 text-center d-flex flex-column">
+      <div>
+        <v-icon
+          v-for="icon in icons"
+          :key="icon"
+          class="mx-4"
+          :color="'white'"
+          :size="'24'"
+        >
+          {{ icon }}
+        </v-icon>
+      </div>
+
+      <div class="pt-0">Your text content</div>
+
+      <v-divider></v-divider>
+
+      <div>{{ new Date().getFullYear() }} — <strong>Vuetify</strong></div>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
-import AppFooter from "@/components/AppFooter.vue";
-
 export default {
-  components: {
-  
-    AppFooter,
+  data() {
+    return {
+      icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin"],
+    };
   },
 };
 </script>
-
-<style scoped>
-/* Add scoped styles here */
-</style>
 
 <style scoped>
 .bg-indigo-lighten-1 {

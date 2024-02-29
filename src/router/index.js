@@ -6,12 +6,12 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    components: {default:AppHome,},
+    components: { default: AppHome },
   },
   {
     path: "/form",
     name: "Form",
-    components: {default:AppForm,},
+    components: { default: AppForm },
   },
   // Add more routes as needed
 ];

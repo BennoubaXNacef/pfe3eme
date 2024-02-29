@@ -1,4 +1,6 @@
 <template>
+  <br />
+  <br />
   <div>
     <v-carousel>
       <v-carousel-item
@@ -114,7 +116,7 @@
 
 <script>
 export default {
-  name: "AppHome",
+  name: "AppForm",
   methods: {
     goToForm() {
       this.$router.push({ name: "Form" });
