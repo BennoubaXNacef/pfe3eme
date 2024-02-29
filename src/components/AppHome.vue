@@ -228,4 +228,5 @@ export default {
   font-weight: bold;
   opacity: 0.8;
 }
+
 </style>
