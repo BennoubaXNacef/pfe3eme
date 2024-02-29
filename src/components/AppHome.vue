@@ -1,7 +1,5 @@
 <template>
-  <br />
-  <br />
-  <div>
+  <div class="bg-container section">
     <v-carousel>
       <v-carousel-item
         :src="require('@/assets/home bg.jpg')"
@@ -12,7 +10,9 @@
 
       <v-carousel-item :src="require('@/assets/3.jpg')" cover></v-carousel-item>
     </v-carousel>
-    <br />
+  </div>
+
+  <div class="section">
     <v-container class="text-container">
       Explorez les opportunités diverses de Tunisie Telecom sur notre
       application web. Que vous soyez intéressé par l'Initiation, le
@@ -21,7 +21,8 @@
       d'opportunités pour votre développement professionnel. Trouvez la voie qui
       correspond à votre parcours et atteignez vos objectifs avec nous
     </v-container>
-    <br />
+  </div>
+  <div class="section">
     <h1 class="boldtext">NOS VALEURS</h1>
     <br />
     <v-row>
@@ -105,11 +106,27 @@
             imprévus et obstacles.
           </v-card-text>
         </v-card>
-        <br />
       </v-col>
     </v-row>
-    <div>
-      <v-btn @click="goToForm">Go to Form</v-btn>
+  </div>
+  <div class="section">
+    <h1 class="boldtext">Rejoignez-nous!</h1>
+    <br />
+
+    <div class="overlay-container">
+      <!-- Background image overlay -->
+      <div class="overlay-image"></div>
+
+      <!-- Text content -->
+      <v-container class="text-containeer">
+        <h1 class="boldtext">Voir Formulaire</h1>
+        <!-- Add other text content here -->
+      </v-container>
+
+      <!-- Button at the bottom -->
+      <div class="button-container">
+        <v-btn class="btn" @click="goToForm">Voir Maintenant !</v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -126,6 +143,53 @@ export default {
 </script>
 
 <style scoped>
+.section {
+  margin-bottom: 30px; /* Adjust the margin as needed for visual separation */
+}
+.btn {
+  color: white;
+  background-color: #001e8c;
+}
+.overlay-container {
+  position: relative;
+  height: 100vh; /* Adjust height based on your design */
+}
+
+.overlay-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("@/assets/bg.jpg"); /* Add your image path */
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5; /* Adjust opacity as needed */
+}
+
+.text-containeer {
+  position: absolute;
+  top: 50%;
+  left: 71%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 1; /* Ensure text is above the overlay image */
+}
+
+.button-container {
+  position: absolute;
+  bottom: 40%; /* Adjust as needed */
+  left: 71%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 1; /* Ensure button is above the overlay image */
+}
+
+.boldtext {
+  font-size: 50px;
+  font-weight: bold;
+  opacity: 0.8;
+}
 .text-container {
   display: flex;
   flex-direction: column;
@@ -138,6 +202,7 @@ export default {
   border-radius: 40px;
   color: #001e8c;
 }
+
 .custom-bg {
   background: linear-gradient(
     to right,
