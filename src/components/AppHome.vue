@@ -1,19 +1,27 @@
 <template>
   <br />
   <br />
-  <div class="bg-container section">
-    <v-carousel>
-      <v-carousel-item
-        :src="require('@/assets/home bg.jpg')"
-        cover
-      ></v-carousel-item>
+  <transition name="fade" mode="out-in">
+    <!-- First Section - Carousel -->
+    <div :key="1" class="bg-container section">
+      <v-carousel>
+        <v-carousel-item
+          :src="require('@/assets/home bg.jpg')"
+          cover
+        ></v-carousel-item>
 
-      <v-carousel-item :src="require('@/assets/2.jpg')" cover></v-carousel-item>
+        <v-carousel-item
+          :src="require('@/assets/2.jpg')"
+          cover
+        ></v-carousel-item>
 
-      <v-carousel-item :src="require('@/assets/3.jpg')" cover></v-carousel-item>
-    </v-carousel>
-  </div>
-
+        <v-carousel-item
+          :src="require('@/assets/3.jpg')"
+          cover
+        ></v-carousel-item>
+      </v-carousel>
+    </div>
+  </transition>
   <div class="section">
     <v-container class="text-container">
       Explorez les opportunités diverses de Tunisie Telecom sur notre
