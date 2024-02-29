@@ -1,4 +1,6 @@
 <template>
+  <br />
+  <br />
   <div class="bg-container section">
     <v-carousel>
       <v-carousel-item
@@ -228,5 +230,4 @@ export default {
   font-weight: bold;
   opacity: 0.8;
 }
-
 </style>
