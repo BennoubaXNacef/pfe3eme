@@ -1,19 +1,48 @@
 <template>
-  <div>
-    <h1>Fiche de Renseignement</h1>
+  <v-container>
 
-    <form @submit.prevent="submitForm">
-      <label for="fullName">Nom & Prénom:</label>
-      <input v-model="formData.fullName" type="text" id="fullName" required />
+    <h1>Fiche de renseignement</h1>
 
-      <label for="idNumber">N° CIN / Passeport:</label>
-      <input v-model="formData.idNumber" type="text" id="idNumber" required />
+    <!-- Form -->
+    <v-form @submit.prevent="submitForm" ref="form">
+      <!-- Nom & Prénom -->
+      <v-text-field v-model="formData.fullName" label="Nom & Prénom" required></v-text-field>
 
-      <!-- Add other form fields as needed -->
+      <!-- N° CIN / Passeport -->
+      <v-text-field v-model="formData.idNumber" label="N° CIN / Passeport" required></v-text-field>
 
-      <button type="submit">Submit</button>
-    </form>
-  </div>
+      <!-- Institut -->
+      <v-text-field v-model="formData.institut" label="Institut"></v-text-field>
+
+      <!-- Diplôme visé -->
+      <v-text-field v-model="formData.diplome" label="Diplôme visé"></v-text-field>
+
+      <!-- Spécialité -->
+      <v-text-field v-model="formData.specialite" label="Spécialité"></v-text-field>
+
+      <!-- Date début & date fin de stage -->
+      <v-row>
+        <v-col cols="6">
+          <v-date-picker v-model="formData.startDate" label="Date début de stage" required></v-date-picker>
+        </v-col>
+        <v-col cols="6">
+          <v-date-picker v-model="formData.endDate" label="Date fin de stage" required></v-date-picker>
+        </v-col>
+      </v-row>
+
+      <!-- Tél du stagiaire -->
+      <v-text-field v-model="formData.tel" label="Tél du stagiaire" required></v-text-field>
+
+      <!-- Lieu de stage -->
+      <v-select v-model="formData.lieuStage" :items="lieuStageOptions" label="Lieu de stage" required></v-select>
+
+      <!-- Type de stage -->
+      <v-select v-model="formData.typeStage" :items="typeStageOptions" label="Type de stage" required></v-select>
+
+      <!-- Submit Button -->
+      <v-btn type="submit">Submit</v-btn>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -23,19 +52,67 @@ export default {
       formData: {
         fullName: "",
         idNumber: "",
-        // Add other form fields here
+        institut: "",
+        diplome: "",
+        specialite: "",
+        startDate: null,
+        endDate: null,
+        tel: "",
+        lieuStage: null,
+        typeStage: null,
       },
+      lieuStageOptions: [
+        "DR Gabès",
+        "Division Réseaux & SI",
+        "Espace TT Gabès",
+        "Espace TT Gabès Sud",
+        "Espace TT El Hamma",
+        "Espace TT Mareth",
+        "Espace TT Metouia",
+        "Subdivision des Affaires Commerciales",
+        "Subdivision des Affaires Financières",
+        "Subdivision de Déploiement des Réseaux",
+        "Subdivision Planification et Ingénierie",
+        "Subdivision Qualité et Optimisation Mobile",
+        "ROC",
+        "Unité CORE",
+        "Unité Transport",
+        "Unité Radio",
+        "UGA",
+        "ULS Gabès",
+        "ULS Zrig",
+      ],
+      typeStageOptions: ["Initiation", "Perfectionnement", "Ouvrier", "Technicien", "Ingénieur", "Alternance"],
     };
   },
   methods: {
     submitForm() {
-      // Handle form submission logic here
-      console.log("Form Data:", this.formData);
+      // Check if the form is valid
+      if (this.$refs.form.validate()) {
+        // Form is valid, proceed with form submission
+        // Handle form submission logic here
+        console.log("Form Data:", this.formData);
+
+        // Automatically record the date of the request
+        this.formData.requestDate = new Date().toISOString();
+
+        // Example: Submit form data to a backend server
+        // axios.post('/submit-form', this.formData)
+        //   .then(response => {
+        //     console.log("Form submitted successfully!", response.data);
+        //   })
+        //   .catch(error => {
+        //     console.error("Error submitting form:", error);
+        //   });
+      } else {
+        // Form is not valid, display error message or take appropriate action
+        console.log("Form is not valid. Please fill in all required fields.");
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-/* Add your styles here */
+/* Add scoped styles here */
 </style>
