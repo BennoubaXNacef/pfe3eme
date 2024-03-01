@@ -16,8 +16,7 @@
           md="4"
         >
           <v-text-field
-            v-model="lastname"
-            :counter="10"
+            v-model.lazy="formData.Nom"
             :rules="lastNameRules"
             label="Nom"
             required
@@ -29,8 +28,7 @@
           md="4"
         >
           <v-text-field
-            v-model="firstname"
-            :counter="10"
+            v-model.lazy="formData.Prénom"
             :rules="firstNameRules"
             label="Prénom"
             required
@@ -42,7 +40,7 @@
           md="4"
         >
           <v-text-field
-            v-model="email"
+            v-model.lazy="formData.email"
             :rules="emailRules"
             label="E-mail"
             required
@@ -131,6 +129,7 @@ export default {
       formData: {
         Nom:"",
         Prénom:"",
+        email:"",
         idNumber: "",
         institut: "",
         diplome: "",
@@ -197,7 +196,7 @@ export default {
     idNumberRules2() {
       return [
         value => !!value || "Ce champ est requis",
-        value => /^([0-9]{9})$/.test(value) || "Le N°Telephone est invalide",
+        value => /^([0-9]{8})$/.test(value) || "Le N°Telephone est invalide",
       ];
     },
   },
