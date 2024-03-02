@@ -56,18 +56,24 @@
         <v-text-field
           v-model="formData.institut"
           label="Institut"
+          :rules="institutRules"
+          required
         ></v-text-field>
 
         <!-- Diplôme visé -->
         <v-text-field
           v-model="formData.diplome"
           label="Diplôme visé"
+          :rules="diplomeRules"
+          required
         ></v-text-field>
 
         <!-- Spécialité -->
         <v-text-field
           v-model="formData.specialite"
           label="Spécialité"
+          :rules="specialiteRules"
+          required
         ></v-text-field>
 
         <!-- Date début & date fin de stage -->
@@ -76,6 +82,7 @@
             <v-date-picker
               v-model="formData.startDate"
               label="Date début de stage"
+              :rules="dateRules"
               required
             ></v-date-picker>
           </v-col>
@@ -83,6 +90,7 @@
             <v-date-picker
               v-model="formData.endDate"
               label="Date fin de stage"
+              :rules="dateRules"
               required
             ></v-date-picker>
           </v-col>
@@ -101,6 +109,7 @@
           v-model="formData.lieuStage"
           :items="lieuStageOptions"
           label="Lieu de stage"
+          :rules="placeRules"
           required
         ></v-select>
 
@@ -109,6 +118,7 @@
           v-model="formData.typeStage"
           :items="typeStageOptions"
           label="Type de stage"
+          :rules="TypestageRules"
           required
         ></v-select>
 
@@ -135,6 +145,7 @@ export default {
       formData: {
         Nom: "",
         Prénom: "",
+        email: "",
         idNumber: "",
         institut: "",
         diplome: "",
@@ -175,6 +186,10 @@ export default {
         "Alternance",
       ],
       firstNameRules: [
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "Le nom ne doit contenir que des lettres et des espaces",
         (value) => {
           if (/[^0-9]/.test(value)) return true;
 
@@ -182,6 +197,10 @@ export default {
         },
       ],
       lastNameRules: [
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "Le nom ne doit contenir que des lettres et des espaces",
         (value) => {
           if (/[^0-9]/.test(value)) return true;
 
