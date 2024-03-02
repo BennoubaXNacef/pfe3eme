@@ -6,34 +6,37 @@
     <v-row class="justify-center">
       <h1>Fiche de renseignement</h1>
     </v-row>
+
     <v-sheet class="mx-auto" width="1200">
       <!-- Form -->
-      <v-form fast-fail v-model="valid" @submit.prevent="submitForm" ref="form">
-        <!-- Nom & Prénom -->
+      <v-form
+        lazy-validation
+        v-model="valid"
+        @submit.prevent="submitForm"
+        ref="form"
+      >
         <v-row>
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="lastname"
-              :counter="10"
-              :rules="lastNameRules"
+              v-model="formData.Nom"
               label="Nom"
+              :rules="lastNameRules"
               required
             ></v-text-field>
           </v-col>
 
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="firstname"
-              :counter="10"
-              :rules="firstNameRules"
+              v-model="formData.Prénom"
               label="Prénom"
+              :rules="firstNameRules"
               required
             ></v-text-field>
           </v-col>
 
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="email"
+              v-model="formData.email"
               :rules="emailRules"
               label="E-mail"
               required
@@ -43,7 +46,7 @@
         <br />
         <!-- N° CIN / Passeport -->
         <v-text-field
-          v-model="formData.idNumber"
+          v-model="idNumber"
           label="N° CIN / Passeport"
           :rules="idNumberRules"
           required
@@ -113,15 +116,22 @@
         <v-row class="justify-end">
           <v-btn type="submit">Submit</v-btn>
         </v-row>
+        <v-row v-if="submissionStatus === 'success'" class="justify-end">
+          <v-alert type="success">Form submitted successfully!</v-alert>
+        </v-row>
       </v-form>
     </v-sheet>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
+      idNumber: "",
+      submissionStatus: null,
+      valid: false,
       formData: {
         Nom: "",
         Prénom: "",
@@ -180,7 +190,14 @@ export default {
       ],
     };
   },
+
   computed: {
+    emailRules() {
+      return [
+        (value) => !!value || "Ce champ est requis",
+        // Add other email validation rules as needed
+      ];
+    },
     idNumberRules() {
       return [
         (value) => !!value || "Ce champ est requis",
@@ -191,11 +208,23 @@ export default {
     },
     idNumberRules2() {
       return [
-        (value) => !!value || "Ce champ est requis",
-        (value) => /^([0-9]{9})$/.test(value) || "Le N°Telephone est invalide",
+        (value) => {
+          console.log("Tel value:", value);
+          console.log("Validation result:", !!value);
+          return !!value || "Ce champ est requis";
+        },
+        (value) => /^([0-9]{8})$/.test(value) || "Le N°Telephone est invalide",
       ];
     },
+
+    // Add this line
   },
+
+  created() {
+    // Set up Axios for HTTP requests
+    this.$http = axios;
+  },
+
   methods: {
     async submitForm() {
       // Check if the form is valid
@@ -203,10 +232,11 @@ export default {
         // Form is valid, proceed with form submission
         try {
           // Use Vue.js HTTP library or Axios to make a POST request to your backend API
-          await this.$http.post(
-            "http://localhost:3000/api/data",
-            this.formData
-          );
+          await this.$http.post("http://localhost:3000/api/data", {
+            ...this.formData,
+            idNumber: this.idNumber,
+          });
+          this.submissionStatus = "success";
 
           // Optionally, reset form data after successful submission
           this.formData = {
@@ -226,6 +256,7 @@ export default {
           console.log("Form submitted successfully!");
         } catch (error) {
           console.error("Error submitting form:", error);
+          this.submissionStatus = "error";
         }
       } else {
         // Form is not valid, display error message or take appropriate action

@@ -25,25 +25,52 @@ db.once("open", () => {
   console.log("Connected to MongoDB");
 });
 
-// Create a simple mongoose schema
-const dataSchema = new mongoose.Schema({
-  name: String,
+// Create a mongoose schema for your form data
+const formDataSchema = new mongoose.Schema({
+  Nom: String,
+  Prénom: String,
+  idNumber: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: (value) =>
+        Number.isInteger(value) && value.toString().length === 8,
+      message: "idNumber must be an 8-digit integer",
+    },
+  },
+  institut: String,
+  diplome: String,
+  specialite: String,
+  startDate: Date,
+  endDate: Date,
+  tel: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: (value) =>
+        Number.isInteger(value) && value.toString().length === 8,
+      message: "tel must be an 8-digit integer",
+    },
+  },
+  lieuStage: String,
+  typeStage: String,
 });
 
-const Data = mongoose.model("Data", dataSchema);
+// Create a Mongoose model based on the schema
+const FormData = mongoose.model("FormData", formDataSchema);
 
 // Express route to handle form submissions
 app.post("/api/data", async (req, res) => {
   try {
-    // Assuming your form sends a field named 'name'
-    const newData = new Data({ name: req.body.name });
+    // Create a new instance of FormData model with request body
+    const newFormData = new FormData(req.body);
 
-    // Save the data to MongoDB
-    await newData.save();
+    // Save the form data to MongoDB
+    await newFormData.save();
 
-    res.status(201).json({ message: "Data saved successfully" });
+    res.status(201).json({ message: "Form data saved successfully!" });
   } catch (error) {
-    console.error("Error saving data:", error);
+    console.error("Error saving form data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
