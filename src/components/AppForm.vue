@@ -1,15 +1,36 @@
 <template>
-  <br />
-  <br />
-  <br />
+  <v-app-bar app color="transparent" dark :elevation="0" fixed  class="nav-bar"
+  :style="{ top: isNavVisible ? 0 : '-64px' }">
+    <v-img
+      :src="require('@/assets/logott.png')"
+      alt="Logo"
+      max-height="40"
+      max-width="40"
+      class="logo"
+    ></v-img>
+    <v-app-bar-title >Tunisie Telecom</v-app-bar-title>
+    <div class="navigation">
+      <a href="#">Accueil</a>
+      <a href="#">Fiche de Renseignement</a>
+      <a href="#">Contact</a>
+    </div>
+  </v-app-bar>
+  <div class="background-container">  
+    <div class="gradient-overlay"></div> 
+    <div class="image-text" style="font-size: 23px;">
+    <h1>Rejoignez-Nous!</h1>
+  </div>
+ </div>
+ <br/>
   <v-container>
-    <v-row class="justify-center">
-      <h1>Fiche de renseignement</h1>
+    <v-row class="justify-center"  >
+      <h1 class="fiche-title">Fiche De Renseignement</h1>
     </v-row>
-
-    <v-sheet class="mx-auto" width="1200">
+    <br />
+    <br />
+    <v-sheet class="mx-auto" width="1000">
       <!-- Form -->
-      <v-form
+      <v-form 
         lazy-validation
         v-model="valid"
         @submit.prevent="submitForm"
@@ -43,7 +64,6 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <br />
         <!-- N° CIN / Passeport -->
         <v-text-field
           v-model="idNumber"
@@ -56,18 +76,24 @@
         <v-text-field
           v-model="formData.institut"
           label="Institut"
+          :rules="institutRules"
+          required
         ></v-text-field>
 
         <!-- Diplôme visé -->
         <v-text-field
           v-model="formData.diplome"
           label="Diplôme visé"
+          :rules="diplomeRules"
+          required
         ></v-text-field>
 
         <!-- Spécialité -->
         <v-text-field
           v-model="formData.specialite"
           label="Spécialité"
+          :rules="specialiteRules"
+          required
         ></v-text-field>
 
         <!-- Date début & date fin de stage -->
@@ -75,21 +101,21 @@
           <v-col cols="6">
             <v-date-picker
               v-model="formData.startDate"
-              label="Date début de stage"
               required
+              title="Date début du stage"
             ></v-date-picker>
           </v-col>
           <v-col cols="6">
             <v-date-picker
               v-model="formData.endDate"
-              label="Date fin de stage"
               required
+              title="Date fin du stage"
             ></v-date-picker>
           </v-col>
         </v-row>
 
         <!-- Tél du stagiaire -->
-        <v-text-field
+        <v-text-field 
           v-model="formData.tel"
           label="Tél du stagiaire"
           :rules="idNumberRules2"
@@ -101,6 +127,7 @@
           v-model="formData.lieuStage"
           :items="lieuStageOptions"
           label="Lieu de stage"
+          :rules="placeRules"
           required
         ></v-select>
 
@@ -109,16 +136,19 @@
           v-model="formData.typeStage"
           :items="typeStageOptions"
           label="Type de stage"
+          :rules="TypestageRules"
           required
         ></v-select>
-
+        
+        <br />
         <!-- Submit Button -->
-        <v-row class="justify-end">
-          <v-btn type="submit">Submit</v-btn>
+        <v-row class="justify-center">
+          <v-btn type="submit" style="background-color:darkblue ;color: white;"  width="500" >Postuler</v-btn>
         </v-row>
         <v-row v-if="submissionStatus === 'success'" class="justify-end">
           <v-alert type="success">Form submitted successfully!</v-alert>
         </v-row>
+        <br/>
       </v-form>
     </v-sheet>
   </v-container>
@@ -129,12 +159,15 @@ import axios from "axios";
 export default {
   data() {
     return {
+      isNavVisible: true,
+      lastScrollPosition: 0,
       idNumber: "",
       submissionStatus: null,
       valid: false,
       formData: {
         Nom: "",
         Prénom: "",
+        email: "",
         idNumber: "",
         institut: "",
         diplome: "",
@@ -175,29 +208,22 @@ export default {
         "Alternance",
       ],
       firstNameRules: [
-        (value) => {
-          if (/[^0-9]/.test(value)) return true;
-
-          return "First name can not contain digits.";
-        },
+      (value) => !!value || "Ce champ est requis",
+      (value) => /^[a-zA-Z\s]*$/.test(value) || "Le nom ne doit contenir que des lettres et des espaces",
       ],
       lastNameRules: [
-        (value) => {
-          if (/[^0-9]/.test(value)) return true;
-
-          return "Last name can not contain digits.";
-        },
+      (value) => !!value || "Ce champ est requis",
+      (value) => /^[a-zA-Z\s]*$/.test(value) || "Le nom ne doit contenir que des lettres et des espaces",
       ],
     };
   },
-
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   computed: {
-    emailRules() {
-      return [
-        (value) => !!value || "Ce champ est requis",
-        // Add other email validation rules as needed
-      ];
-    },
     idNumberRules() {
       return [
         (value) => !!value || "Ce champ est requis",
@@ -216,16 +242,52 @@ export default {
         (value) => /^([0-9]{8})$/.test(value) || "Le N°Telephone est invalide",
       ];
     },
-
-    // Add this line
+    emailRules() {
+    return [
+      value => !!value || "Ce champ est requis",
+      value => /.+@.+\..+/.test(value) || "E-mail invalide",
+    ];
   },
-
+  diplomeRules() {
+    return [
+      value => !!value || "Ce champ est requis",
+      value => /^[a-zA-Z\s]*$/.test(value) || "Le diplome ne doit contenir que des lettres et des espaces",
+    ];
+  },
+  institutRules() {
+    return [
+      value => !!value || "Ce champ est requis",
+      value => /^[a-zA-Z\s]*$/.test(value) || "l'institut ne doit contenir que des lettres et des espaces",
+    ];
+  },
+  specialiteRules(){
+    return [
+      value => !!value || "Ce champ est requis",
+      value => /^[a-zA-Z\s]*$/.test(value) || "La spécialité ne doit contenir que des lettres et des espaces",
+    ];
+  },
+  placeRules(){
+    return [
+      value => !!value || "Ce champ est requis",
+    ];
+  },
+  TypestageRules(){
+    return [
+      value => !!value || "Ce champ est requis",
+    ];
+  },
+},
   created() {
     // Set up Axios for HTTP requests
     this.$http = axios;
   },
 
   methods: {
+    handleScroll() {
+      const currentScrollPosition = window.pageYOffset;
+      this.isNavVisible = currentScrollPosition <= this.lastScrollPosition || currentScrollPosition < 64; // Adjust the threshold as needed
+      this.lastScrollPosition = currentScrollPosition;
+    },
     async submitForm() {
       // Check if the form is valid
       if (this.$refs.form.validate()) {
@@ -268,12 +330,48 @@ export default {
 </script>
 
 <style scoped>
-.justify-end {
-  justify-content: flex-end;
-}
 .justify-center {
   justify-content: center;
 }
+.background-container {
+  background-image: url("@/assets/contact.jpg"); /* Replace 'your-image.jpg' with the path to your image */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  width:100%;
+  height: 400px;
+  }
+  .gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(122, 6, 130, 0.73), rgba(9, 80, 120, 0.7)); /* Adjust gradient colors and opacity */
+}
+  .image-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(238, 236, 236); /* Adjust text color */
+}
+.fiche-title {
+  font-weight: bold;
+  color: darkblue;
+}
+.navigation {
+  display: flex;
+}
 
+.navigation a {
+  color: #150762; /* Adjust text color as needed */
+  text-decoration: none;
+  margin-left: 20px; /* Adjust spacing between links as needed */
+}
+
+.navigation a:hover {
+  text-decoration: underline;
+}
 /* Add scoped styles here */
 </style>
