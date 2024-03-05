@@ -1,6 +1,5 @@
 <template>
-  <v-app-bar app color="transparent" dark :elevation="0" fixed  class="nav-bar"
-  :style="{ top: isNavVisible ? 0 : '-64px' }">
+  <v-app-bar app color="darkblue" :elevation="elevation" fixed  class="nav-bar">
     <v-img
       :src="require('@/assets/logott.png')"
       alt="Logo"
@@ -8,7 +7,7 @@
       max-width="40"
       class="logo"
     ></v-img>
-    <v-app-bar-title >Tunisie Telecom</v-app-bar-title>
+    <v-app-bar-title class="title">Tunisie Telecom</v-app-bar-title>
     <div class="navigation">
       <a href="#">Accueil</a>
       <a href="#">Fiche de Renseignement</a>
@@ -159,6 +158,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      elevation: 0, 
       isNavVisible: true,
       lastScrollPosition: 0,
       idNumber: "",
@@ -278,15 +278,19 @@ export default {
   },
 },
   created() {
-    // Set up Axios for HTTP requests
     this.$http = axios;
   },
 
   methods: {
     handleScroll() {
       const currentScrollPosition = window.pageYOffset;
-      this.isNavVisible = currentScrollPosition <= this.lastScrollPosition || currentScrollPosition < 64; // Adjust the threshold as needed
-      this.lastScrollPosition = currentScrollPosition;
+      const imageSectionHeight = 400;
+      const navBar = document.querySelector('.nav-bar');
+      const imageSectionEnd = imageSectionHeight;
+      if (currentScrollPosition < imageSectionEnd) {
+      const opacity = currentScrollPosition / imageSectionEnd;
+      navBar.style.backgroundColor = `rgba(0, 30, 140, ${opacity})`;
+    } 
     },
     async submitForm() {
       // Check if the form is valid
@@ -299,8 +303,6 @@ export default {
             idNumber: this.idNumber,
           });
           this.submissionStatus = "success";
-
-          // Optionally, reset form data after successful submission
           this.formData = {
             Nom: "",
             Prénom: "",
@@ -320,9 +322,6 @@ export default {
           console.error("Error submitting form:", error);
           this.submissionStatus = "error";
         }
-      } else {
-        // Form is not valid, display error message or take appropriate action
-        console.log("Form is not valid. Please fill in all required fields.");
       }
     },
   },
@@ -330,6 +329,9 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  color: white;
+}
 .justify-center {
   justify-content: center;
 }
@@ -343,8 +345,6 @@ export default {
   }
   .gradient-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, rgba(122, 6, 130, 0.73), rgba(9, 80, 120, 0.7)); /* Adjust gradient colors and opacity */
@@ -365,9 +365,9 @@ export default {
 }
 
 .navigation a {
-  color: #150762; /* Adjust text color as needed */
+  color: #c7bdfb; 
   text-decoration: none;
-  margin-left: 20px; /* Adjust spacing between links as needed */
+  margin-left: 20px; 
 }
 
 .navigation a:hover {
