@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import AppHome from "@/components/AppHome.vue";
 import AppForm from "@/components/AppForm.vue";
+import AppSuccess from "@/components/AppSuccess.vue";
 
 const routes = [
   {
@@ -13,6 +14,9 @@ const routes = [
     name: "Form",
     component: AppForm,
   },
+  { path: '/success', 
+    name:"Success",
+    component: AppSuccess },
   {
     path: "/backend-data",
     name: "BackendData",

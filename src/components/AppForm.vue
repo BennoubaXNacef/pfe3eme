@@ -303,6 +303,7 @@ export default {
             idNumber: this.idNumber,
           });
           this.submissionStatus = "success";
+          this.$router.push('/success');
           this.formData = {
             Nom: "",
             Prénom: "",

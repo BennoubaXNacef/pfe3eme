@@ -1,9 +1,7 @@
 <template>
-  <v-app>
-
-    <!-- Main Content (Routed Components) -->
+  <v-app> <div id="app">
     <router-view></router-view>
-
+  </div>
     <!-- Footer -->
     <v-footer class="bg-indigo-lighten-1 text-center d-flex flex-column">
       <div>
@@ -26,9 +24,9 @@
     </v-footer>
   </v-app>
 </template>
-
 <script>
 export default {
+  name: 'App',
   data() {
     return {
       icons: ["mdi-facebook", "mdi-twitter", "mdi-linkedin"],
