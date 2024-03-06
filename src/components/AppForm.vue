@@ -348,7 +348,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(122, 6, 130, 0.73), rgba(9, 80, 120, 0.7)); /* Adjust gradient colors and opacity */
+  background: linear-gradient(to bottom, rgba(122, 6, 130, 0.73), rgba(9, 80, 120, 0.7)); 
 }
   .image-text {
   position: absolute;
