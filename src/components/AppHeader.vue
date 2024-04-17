@@ -10,18 +10,24 @@
     <v-app-bar-title class="title">Tunisie Telecom</v-app-bar-title>
     <div class="navigation">
       <a href="#">Accueil</a>
-      <a href="#">Fiche de Renseignement</a>
       <a href="#">Contact</a>
+      <a href="#" @click="showLoginDialog">Connexion</a>
     </div>
   </v-app-bar>
+  <LoginDialog v-model="loginDialogVisible" />
 </template>
   <script>
+  import LoginDialog from '@/components/LoginDialog.vue';
   export default {
+    components: {
+    LoginDialog
+  },
     data() {
       return {
         elevation: 0, 
         isNavVisible: true,
         lastScrollPosition: 0,
+        loginDialogVisible: false,
     }
     },
     mounted() {
@@ -31,6 +37,9 @@
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    showLoginDialog() {
+      this.loginDialogVisible = true;
+    },
     handleScroll() {
       const currentScrollPosition = window.pageYOffset;
       const imageSectionHeight = 400;

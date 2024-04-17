@@ -10,10 +10,11 @@
     <v-app-bar-title class="title">Tunisie Telecom</v-app-bar-title>
     <div class="navigation">
       <a href="#">Accueil</a>
-      <a href="#">Fiche de Renseignement</a>
       <a href="#">Contact</a>
+      <a href="#" @click.prevent="showLoginDialog">Connexion</a>
     </div>
   </v-app-bar>
+  <LoginDialog v-model="loginDialogVisible" />
   <div class="background-container">  
     <div class="gradient-overlay"></div> 
     <div class="image-text" style="font-size: 23px;">
@@ -155,12 +156,17 @@
 
 <script>
 import axios from "axios";
+import LoginDialog from '@/components/LoginDialog.vue'; // Adjust the path based on your project structure
 export default {
+  components: {
+    LoginDialog
+  },
   data() {
     return {
       elevation: 0, 
       isNavVisible: true,
       lastScrollPosition: 0,
+      loginDialogVisible: false,
       idNumber: "",
       submissionStatus: null,
       valid: false,
@@ -282,6 +288,9 @@ export default {
   },
 
   methods: {
+    showLoginDialog() {
+      this.loginDialogVisible = true;
+    },
     handleScroll() {
       const currentScrollPosition = window.pageYOffset;
       const imageSectionHeight = 400;
