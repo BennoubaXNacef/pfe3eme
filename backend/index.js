@@ -78,3 +78,13 @@ app.post("/api/data", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+// Express route to get all form data entries
+app.get("/api/data", async (req, res) => {
+  try {
+    const formDataEntries = await FormData.find();
+    res.json(formDataEntries);
+  } catch (error) {
+    console.error("Error retrieving form data:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});

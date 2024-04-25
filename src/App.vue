@@ -3,7 +3,8 @@
     <div id="app">
       <router-view></router-view>
     </div>
-    <div class="overlay-container">
+
+    <div v-if="!isAdminRoute" class="overlay-container">
       <div class="overlay-image"></div>
       <div class="gradient-overlay"></div>
 
@@ -88,7 +89,7 @@
         </v-col>
       </v-row>
     </div>
-    <v-footer class="app-footer">
+    <v-footer v-if="!isAdminRoute" class="app-footer">
       <h5>
         © {{ new Date().getFullYear() }} Tunisie Telecom Gabes. Tous droits
         réservés.
@@ -101,6 +102,11 @@
 export default {
   data() {
     return {};
+  },
+  computed: {
+    isAdminRoute() {
+      return this.$route.meta.isAdmin; // Checks if the current route has `isAdmin` meta
+    },
   },
 };
 </script>

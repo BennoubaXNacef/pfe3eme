@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="darkblue" :elevation="elevation" fixed  class="nav-bar">
+  <v-app-bar app color="darkblue" :elevation="elevation" fixed class="nav-bar">
     <v-img
       :src="require('@/assets/logott.png')"
       alt="Logo"
@@ -15,22 +15,22 @@
     </div>
   </v-app-bar>
   <LoginDialog v-model="loginDialogVisible" />
-  <div class="background-container">  
-    <div class="gradient-overlay"></div> 
-    <div class="image-text" style="font-size: 23px;">
-    <h1>Rejoignez-Nous!</h1>
+  <div class="background-container">
+    <div class="gradient-overlay"></div>
+    <div class="image-text" style="font-size: 23px">
+      <h1>Rejoignez-Nous!</h1>
+    </div>
   </div>
- </div>
- <br/>
+  <br />
   <v-container>
-    <v-row class="justify-center"  >
+    <v-row class="justify-center">
       <h1 class="fiche-title">Fiche De Renseignement</h1>
     </v-row>
     <br />
     <br />
     <v-sheet class="mx-auto" width="1000">
       <!-- Form -->
-      <v-form 
+      <v-form
         lazy-validation
         v-model="valid"
         @submit.prevent="submitForm"
@@ -115,7 +115,7 @@
         </v-row>
 
         <!-- Tél du stagiaire -->
-        <v-text-field 
+        <v-text-field
           v-model="formData.tel"
           label="Tél du stagiaire"
           :rules="idNumberRules2"
@@ -139,16 +139,21 @@
           :rules="TypestageRules"
           required
         ></v-select>
-        
+
         <br />
         <!-- Submit Button -->
         <v-row class="justify-center">
-          <v-btn type="submit" style="background-color:darkblue ;color: white;"  width="500" >Postuler</v-btn>
+          <v-btn
+            type="submit"
+            style="background-color: darkblue; color: white"
+            width="500"
+            >Postuler</v-btn
+          >
         </v-row>
         <v-row v-if="submissionStatus === 'success'" class="justify-end">
           <v-alert type="success">Form submitted successfully!</v-alert>
         </v-row>
-        <br/>
+        <br />
       </v-form>
     </v-sheet>
   </v-container>
@@ -156,14 +161,14 @@
 
 <script>
 import axios from "axios";
-import LoginDialog from '@/components/LoginDialog.vue'; // Adjust the path based on your project structure
+import LoginDialog from "@/components/LoginDialog.vue"; // Adjust the path based on your project structure
 export default {
   components: {
-    LoginDialog
+    LoginDialog,
   },
   data() {
     return {
-      elevation: 0, 
+      elevation: 0,
       isNavVisible: true,
       lastScrollPosition: 0,
       loginDialogVisible: false,
@@ -214,20 +219,24 @@ export default {
         "Alternance",
       ],
       firstNameRules: [
-      (value) => !!value || "Ce champ est requis",
-      (value) => /^[a-zA-Z\s]*$/.test(value) || "Le nom ne doit contenir que des lettres et des espaces",
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "Le nom ne doit contenir que des lettres et des espaces",
       ],
       lastNameRules: [
-      (value) => !!value || "Ce champ est requis",
-      (value) => /^[a-zA-Z\s]*$/.test(value) || "Le nom ne doit contenir que des lettres et des espaces",
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "Le nom ne doit contenir que des lettres et des espaces",
       ],
     };
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   unmounted() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   computed: {
     idNumberRules() {
@@ -249,40 +258,42 @@ export default {
       ];
     },
     emailRules() {
-    return [
-      value => !!value || "Ce champ est requis",
-      value => /.+@.+\..+/.test(value) || "E-mail invalide",
-    ];
+      return [
+        (value) => !!value || "Ce champ est requis",
+        (value) => /.+@.+\..+/.test(value) || "E-mail invalide",
+      ];
+    },
+    diplomeRules() {
+      return [
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "Le diplome ne doit contenir que des lettres et des espaces",
+      ];
+    },
+    institutRules() {
+      return [
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "l'institut ne doit contenir que des lettres et des espaces",
+      ];
+    },
+    specialiteRules() {
+      return [
+        (value) => !!value || "Ce champ est requis",
+        (value) =>
+          /^[a-zA-Z\s]*$/.test(value) ||
+          "La spécialité ne doit contenir que des lettres et des espaces",
+      ];
+    },
+    placeRules() {
+      return [(value) => !!value || "Ce champ est requis"];
+    },
+    TypestageRules() {
+      return [(value) => !!value || "Ce champ est requis"];
+    },
   },
-  diplomeRules() {
-    return [
-      value => !!value || "Ce champ est requis",
-      value => /^[a-zA-Z\s]*$/.test(value) || "Le diplome ne doit contenir que des lettres et des espaces",
-    ];
-  },
-  institutRules() {
-    return [
-      value => !!value || "Ce champ est requis",
-      value => /^[a-zA-Z\s]*$/.test(value) || "l'institut ne doit contenir que des lettres et des espaces",
-    ];
-  },
-  specialiteRules(){
-    return [
-      value => !!value || "Ce champ est requis",
-      value => /^[a-zA-Z\s]*$/.test(value) || "La spécialité ne doit contenir que des lettres et des espaces",
-    ];
-  },
-  placeRules(){
-    return [
-      value => !!value || "Ce champ est requis",
-    ];
-  },
-  TypestageRules(){
-    return [
-      value => !!value || "Ce champ est requis",
-    ];
-  },
-},
   created() {
     this.$http = axios;
   },
@@ -294,12 +305,12 @@ export default {
     handleScroll() {
       const currentScrollPosition = window.pageYOffset;
       const imageSectionHeight = 400;
-      const navBar = document.querySelector('.nav-bar');
+      const navBar = document.querySelector(".nav-bar");
       const imageSectionEnd = imageSectionHeight;
       if (currentScrollPosition < imageSectionEnd) {
-      const opacity = currentScrollPosition / imageSectionEnd;
-      navBar.style.backgroundColor = `rgba(0, 30, 140, ${opacity})`;
-    } 
+        const opacity = currentScrollPosition / imageSectionEnd;
+        navBar.style.backgroundColor = `rgba(0, 30, 140, ${opacity})`;
+      }
     },
     async submitForm() {
       // Check if the form is valid
@@ -312,7 +323,7 @@ export default {
             idNumber: this.idNumber,
           });
           this.submissionStatus = "success";
-          this.$router.push('/success');
+          this.$router.push("/success");
           this.formData = {
             Nom: "",
             Prénom: "",
@@ -350,16 +361,20 @@ export default {
   background-size: cover;
   background-position: center;
   position: relative;
-  width:100%;
+  width: 100%;
   height: 400px;
-  }
-  .gradient-overlay {
+}
+.gradient-overlay {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(122, 6, 130, 0.73), rgba(9, 80, 120, 0.7)); 
+  background: linear-gradient(
+    to bottom,
+    rgba(122, 6, 130, 0.73),
+    rgba(9, 80, 120, 0.7)
+  );
 }
-  .image-text {
+.image-text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -375,9 +390,9 @@ export default {
 }
 
 .navigation a {
-  color: #c7bdfb; 
+  color: #c7bdfb;
   text-decoration: none;
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
 .navigation a:hover {
