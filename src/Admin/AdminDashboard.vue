@@ -31,41 +31,6 @@
       <v-container>
         <router-view></router-view>
         <!-- Dashboard Widgets -->
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-card class="pa-3" color="blue-grey lighten-2" dark>
-              <v-card-title>Total Interns</v-card-title>
-              <v-card-text class="display-1">120</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-card class="pa-3" color="cyan darken-2" dark>
-              <v-card-title>Pending Tasks</v-card-title>
-              <v-card-text class="display-1">15</v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-card>
-              <v-card-title>Recent Activities</v-card-title>
-              <v-card-text>
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-content
-                      >Assigned John Doe to Marketing</v-list-item-content
-                    >
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-content
-                      >Issued certificate for Jane Smith</v-list-item-content
-                    >
-                  </v-list-item>
-                </v-list>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -85,7 +50,7 @@ export default {
         {
           icon: "mdi-file-document-edit",
           text: "Modèle CNFCPP",
-          path: "/admin/modele-cnfcpp",
+          path: "/admin/modele-cnfcpp", // This should match the router path
         },
         {
           icon: "mdi-certificate",

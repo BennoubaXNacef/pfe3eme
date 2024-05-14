@@ -4,6 +4,8 @@ import AppForm from "@/components/AppForm.vue";
 import AppSuccess from "@/components/AppSuccess.vue";
 import AdminDashboard from "@/Admin/AdminDashboard.vue";
 import AffectationStagiaire from "@/Admin/AffectationStagiaire.vue";
+import ModeleCNFCPP from "@/Admin/ModeleCNFCPP.vue";
+import AttestationStage from "@/Admin/AttestationStage.vue";
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
         path: "affectation-stagiaire",
         component: AffectationStagiaire,
         name: "AffectationStagiaire",
+      },
+      {
+        path: "modele-cnfcpp", // a URL-friendly path
+        component: ModeleCNFCPP,
+        name: "ModeleCNFCPP",
+      },
+      {
+        path: "attestation-stage", // a URL-friendly path
+        component: AttestationStage,
+        name: "AttestationStage",
       },
       // other child routes...
     ],

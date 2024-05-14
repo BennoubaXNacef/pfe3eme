@@ -1,90 +1,149 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const path = require("path");
 const app = express();
 const port = 3000;
 
-// Enable CORS
 app.use(cors());
-
-// Parse JSON bodies
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../public")));
 
 // MongoDB connection
-const mongoDBConnectionURL = "mongodb://127.0.0.1:27017/pfe3eme";
+mongoose
+  .connect("mongodb://127.0.0.1:27017/pfe3eme", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-mongoose.connect(mongoDBConnectionURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+// Counter schema to maintain sequential IDs
+const CounterSchema = new mongoose.Schema({
+  _id: String,
+  seq: { type: Number, default: 0 },
 });
+const Counter = mongoose.model("Counter", CounterSchema);
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => {
-  console.log("Connected to MongoDB");
-});
-
-// Create a mongoose schema for your form data
-const formDataSchema = new mongoose.Schema({
+// Form data schema
+const FormDataSchema = new mongoose.Schema({
+  lineId: Number,
   Nom: String,
   Prénom: String,
-  idNumber: {
-    type: Number,
-    required: true,
-    validate: {
-      validator: (value) =>
-        Number.isInteger(value) && value.toString().length === 8,
-      message: "idNumber must be an 8-digit integer",
-    },
-  },
+  email: String,
   institut: String,
   diplome: String,
   specialite: String,
   startDate: Date,
   endDate: Date,
-  tel: {
-    type: Number,
-    required: true,
-    validate: {
-      validator: (value) =>
-        Number.isInteger(value) && value.toString().length === 8,
-      message: "tel must be an 8-digit integer",
-    },
-  },
+  tel: Number,
   lieuStage: String,
   typeStage: String,
+  idNumber: Number,
+  refH: String,
+  jours: Number,
+  mois: Number,
+  TFP: String,
+  genre: String,
+  nationalite: String,
+  diracceuil: String,
+  typecontrat: String,
+  avis: String,
+  nomEncadrant: String,
+  telEncardrant: Number,
+  datedemande: Date,
+  dateattestation: Date,
+  sujet: String,
+  nomrespo: String,
+  telrespo: Number,
+  Mailrespo: String,
+  etat: { type: String, default: "en attente" }, // Default state is "en attente"
 });
 
-// Create a Mongoose model based on the schema
-const FormData = mongoose.model("FormData", formDataSchema);
+// Ensure a sequential lineId is assigned before saving a FormData document
+FormDataSchema.pre("save", function (next) {
+  var doc = this;
+  Counter.findByIdAndUpdate(
+    { _id: "lineId" },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
+  )
+    .then((counter) => {
+      doc.lineId = counter.seq; // Set lineId as the counter value
+      next();
+    })
+    .catch((error) => {
+      next(error);
+    });
+});
 
-// Express route to handle form submissions
-app.post("/api/data", async (req, res) => {
-  try {
-    // Create a new instance of FormData model with request body
-    const newFormData = new FormData(req.body);
+const FormData = mongoose.model("FormData", FormDataSchema);
 
-    // Save the form data to MongoDB
-    await newFormData.save();
+// Routes
+app.get("/api/data", (req, res) => {
+  const etatFilter = req.query.etat ? { etat: req.query.etat } : {};
+  FormData.find(etatFilter)
+    .then((data) => res.status(200).json(data))
+    .catch((err) =>
+      res.status(500).json({ message: "Error retrieving data", error: err })
+    );
+});
 
-    res.status(201).json({ message: "Form data saved successfully!" });
-  } catch (error) {
-    console.error("Error saving form data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+// Update state endpoint
+// Update data endpoint
+app.post("/api/data/:lineId", (req, res) => {
+  const updates = req.body; // This contains all the fields that need to be updated
+  const lineId = parseInt(req.params.lineId); // Ensure it's a number if lineId is stored as a number
+  console.log("Received update for lineId:", lineId, "with data:", updates);
+
+  FormData.findOneAndUpdate(
+    { lineId: lineId },
+    { $set: updates },
+    { new: true }
+  )
+    .then((data) => {
+      if (!data) {
+        return res
+          .status(404)
+          .json({ message: "No document found with lineId: " + lineId });
+      }
+      res
+        .status(200)
+        .json({ message: "Data updated successfully", data: data });
+    })
+    .catch((error) => {
+      console.error("Failed to update data:", error);
+      res.status(500).json({ message: "Error updating data", error: error });
+    });
+});
+
+// Route to update state
+// Route to update state
+// Update 'etat' for a specific entry identified by 'lineId'
+app.post("/api/data/update-etat/:lineId", (req, res) => {
+  const { etat } = req.body; // Get the new 'etat' from request body
+  const { lineId } = req.params; // Get the 'lineId' from URL parameters
+
+  FormData.findOneAndUpdate(
+    { lineId: lineId },
+    { $set: { etat: etat } },
+    { new: true }
+  )
+    .then((updatedDocument) => {
+      if (!updatedDocument) {
+        return res.status(404).send("Document with specified ID not found.");
+      }
+      res
+        .status(200)
+        .json({ message: "Etat updated successfully", data: updatedDocument });
+    })
+    .catch((error) =>
+      res.status(500).json({ message: "Error updating etat", error })
+    );
 });
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
-// Express route to get all form data entries
-app.get("/api/data", async (req, res) => {
-  try {
-    const formDataEntries = await FormData.find();
-    res.json(formDataEntries);
-  } catch (error) {
-    console.error("Error retrieving form data:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+console.log("Serving files from:", path.join(__dirname, "public"));
+console.log(path.join(__dirname, "public")); // This should output the absolute path to your 'public' folder

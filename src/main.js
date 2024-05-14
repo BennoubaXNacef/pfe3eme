@@ -1,24 +1,29 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import AppHome from "@/components/AppHome.vue";
-import vuetify from "./plugins/vuetify";
-import { loadFonts } from "./plugins/webfontloader";
-import router from "./router";
-import { VUE_PROD_HYDRATION_MISMATCH_DETAILS } from "vue";
+import router from "./router"; // Ensure this is correctly imported
+import { createVuetify } from "vuetify";
+import "vuetify/styles"; // Import Vuetify styles
 
-// Load fonts (if needed)
+// Optional: Import font loader utility if you have one
+import { loadFonts } from "./plugins/webfontloader";
+import AppHome from "@/components/AppHome.vue";
+// Load fonts if you're using any custom fonts via webfontloader
 loadFonts();
 
-// Create the Vue app instance
+// Create the Vue application instance
 const app = createApp(App);
 
-// Add the missing feature flag
-app.config[`${VUE_PROD_HYDRATION_MISMATCH_DETAILS}__`] = false;
+// Create and configure the Vuetify instance
+const vuetify = createVuetify();
 
-// Use the components and router
-app.component("AppHome", AppHome);
+// Use Vuetify instance
 app.use(vuetify);
+
+// Setup Vue Router
 app.use(router);
 
-// Mount the app
+// Register global components if you have any
+app.component("AppHome", AppHome);
+
+// Mount the application to the DOM
 app.mount("#app");

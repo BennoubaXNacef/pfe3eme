@@ -66,7 +66,7 @@
         </v-row>
         <!-- N° CIN / Passeport -->
         <v-text-field
-          v-model="idNumber"
+          v-model="formData.idNumber"
           label="N° CIN / Passeport"
           :rules="idNumberRules"
           required
@@ -101,15 +101,17 @@
           <v-col cols="6">
             <v-date-picker
               v-model="formData.startDate"
-              required
-              title="Date début du stage"
+              format="yyyy-MM-dd"
+              no-title
+              :picker-type="'Debut de stage'"
             ></v-date-picker>
           </v-col>
           <v-col cols="6">
             <v-date-picker
               v-model="formData.endDate"
-              required
-              title="Date fin du stage"
+              format="yyyy-MM-dd"
+              no-title
+              :picker-type="'Fin de stage'"
             ></v-date-picker>
           </v-col>
         </v-row>
@@ -140,6 +142,19 @@
           required
         ></v-select>
 
+        <!-- Text area for motivation -->
+        <v-row>
+          <v-col cols="12">
+            <v-textarea
+              v-model="formData.motivation"
+              label="Why did you choose our company for your internship?"
+              rows="3"
+              auto-grow
+              outlined
+              required
+            ></v-textarea>
+          </v-col>
+        </v-row>
         <br />
         <!-- Submit Button -->
         <v-row class="justify-center">
@@ -179,7 +194,7 @@ export default {
         Nom: "",
         Prénom: "",
         email: "",
-        idNumber: "",
+        idNumber: "", // Correctly initializing here as a string
         institut: "",
         diplome: "",
         specialite: "",
@@ -306,44 +321,51 @@ export default {
       const currentScrollPosition = window.pageYOffset;
       const imageSectionHeight = 400;
       const navBar = document.querySelector(".nav-bar");
-      const imageSectionEnd = imageSectionHeight;
-      if (currentScrollPosition < imageSectionEnd) {
-        const opacity = currentScrollPosition / imageSectionEnd;
+      if (currentScrollPosition < imageSectionHeight) {
+        const opacity = currentScrollPosition / imageSectionHeight;
         navBar.style.backgroundColor = `rgba(0, 30, 140, ${opacity})`;
       }
     },
+    formatDate(date) {
+      return date ? new Date(date).toISOString().split("T")[0] : null;
+    },
     async submitForm() {
-      // Check if the form is valid
       if (this.$refs.form.validate()) {
-        // Form is valid, proceed with form submission
+        // Explicitly convert idNumber to a Number
+        this.formData.idNumber = Number(this.formData.idNumber);
+        console.log("Converted idNumber to Number:", this.formData.idNumber);
+
         try {
-          // Use Vue.js HTTP library or Axios to make a POST request to your backend API
-          await this.$http.post("http://localhost:3000/api/data", {
-            ...this.formData,
-            idNumber: this.idNumber,
-          });
+          const response = await axios.post(
+            "http://localhost:3000/api/data",
+            this.formData
+          );
+          console.log("Submission Successful", response.data);
           this.submissionStatus = "success";
           this.$router.push("/success");
-          this.formData = {
-            Nom: "",
-            Prénom: "",
-            idNumber: "",
-            institut: "",
-            diplome: "",
-            specialite: "",
-            startDate: null,
-            endDate: null,
-            tel: "",
-            lieuStage: null,
-            typeStage: null,
-          };
-
-          console.log("Form submitted successfully!");
         } catch (error) {
           console.error("Error submitting form:", error);
           this.submissionStatus = "error";
         }
       }
+    },
+
+    resetForm() {
+      // Reset the formData to initial state
+      this.formData = {
+        Nom: "",
+        Prénom: "",
+        email: "",
+        idNumber: "",
+        institut: "",
+        diplome: "",
+        specialite: "",
+        startDate: null,
+        endDate: null,
+        tel: "",
+        lieuStage: null,
+        typeStage: null,
+      };
     },
   },
 };
