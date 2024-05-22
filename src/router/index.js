@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import AppHome from "@/components/AppHome.vue";
+import Catalogue from "@/components/Catalogue.vue";
 import AppForm from "@/components/AppForm.vue";
 import AppSuccess from "@/components/AppSuccess.vue";
 import AdminDashboard from "@/Admin/AdminDashboard.vue";
@@ -19,6 +20,11 @@ const routes = [
     path: "/form",
     name: "Form",
     component: AppForm,
+  },
+  {
+    path: "/catalogue",
+    name: "Catalogue",
+    component: Catalogue,
   },
   {
     path: "/success",

@@ -1,16 +1,7 @@
 <template>
   <br />
   <br />
-  <v-app-bar app color="#001e8c" dark :elevation="5">
-      <v-img
-        :src="require('@/assets/logott.png')"
-        alt="Logo"
-        max-height="40"
-        max-width="40"
-        class="logo"
-      ></v-img>
-      <v-app-bar-title>Tunisie Telecom</v-app-bar-title>
-    </v-app-bar>
+  
 
   <transition name="fade" mode="out-in">
     <!-- First Section - Carousel -->

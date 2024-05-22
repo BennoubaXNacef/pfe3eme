@@ -1,5 +1,22 @@
 <template>
   <v-app>
+    <v-app-bar v-if="!isAdminRoute" app color="#001e8c" dark :elevation="5">
+      <v-img
+        :src="require('@/assets/logott.png')"
+        alt="Logo"
+        max-height="40"
+        max-width="40"
+        class="logo"
+      ></v-img>
+      <v-app-bar-title>Tunisie Telecom</v-app-bar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+        <v-btn text to="/">Accueil</v-btn>
+        <v-btn text to="/form">Formulaire Stagiaire</v-btn>
+        <v-btn text to="/catalogue">Catalogue</v-btn>
+        <v-btn text to="/connect">Login Admin</v-btn>
+      </v-toolbar-items>
+    </v-app-bar>
     <div id="app">
       <router-view></router-view>
     </div>
@@ -106,11 +123,17 @@ export default {
 
   watch: {
     $route(to) {
-      this.isAdminRoute = to.path === "/connect";
+      this.isAdminRoute =
+        to.path === "/connect" ||
+        to.path.startsWith("/admin") ||
+        to.path === "/form";
     },
   },
   mounted() {
-    this.isAdminRoute = this.$route.path === "/connect";
+    this.isAdminRoute =
+      this.$route.path === "/connect" ||
+      this.$route.path.startsWith("/admin") ||
+      this.$route.path === "/form";
   },
 };
 </script>
