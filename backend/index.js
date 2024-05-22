@@ -79,6 +79,19 @@ FormDataSchema.pre("save", function (next) {
 
 const FormData = mongoose.model("FormData", FormDataSchema);
 
+// ConnectRequest schema for /api/admin/request route
+const ConnectRequestSchema = new mongoose.Schema({
+  name: String,
+  surname: String,
+  phone: String,
+  idNumber: String,
+  requestUsername: String,
+  requestPassword: String,
+  status: { type: String, default: "pending" },
+});
+
+const ConnectRequest = mongoose.model("ConnectRequest", ConnectRequestSchema);
+
 // Routes
 app.get("/api/data", (req, res) => {
   const etatFilter = req.query.etat ? { etat: req.query.etat } : {};
@@ -89,7 +102,6 @@ app.get("/api/data", (req, res) => {
     );
 });
 
-// Update state endpoint
 // Update data endpoint
 app.post("/api/data/:lineId", (req, res) => {
   const updates = req.body; // This contains all the fields that need to be updated
@@ -118,8 +130,6 @@ app.post("/api/data/:lineId", (req, res) => {
 });
 
 // Route to update state
-// Route to update state
-// Update 'etat' for a specific entry identified by 'lineId'
 app.post("/api/data/update-etat/:lineId", (req, res) => {
   const { etat } = req.body; // Get the new 'etat' from request body
   const { lineId } = req.params; // Get the 'lineId' from URL parameters
@@ -140,6 +150,159 @@ app.post("/api/data/update-etat/:lineId", (req, res) => {
     .catch((error) =>
       res.status(500).json({ message: "Error updating etat", error })
     );
+});
+
+// Route to handle /connect POST requests
+app.post("/connect", async (req, res) => {
+  const connectRequestData = req.body;
+  try {
+    const connectRequest = new ConnectRequest(connectRequestData);
+    await connectRequest.save();
+    res.json({ success: true, message: "Request sent successfully" });
+  } catch (error) {
+    console.error("Connect request error:", error);
+    res.status(500).json({ success: false, message: "Failed to send request" });
+  }
+});
+
+// Route to handle /api/admin/request POST requests
+app.post("/api/admin/request", async (req, res) => {
+  const requestData = req.body;
+  console.log("Received request data:", requestData); // Log the received data
+  try {
+    const request = new ConnectRequest(requestData);
+    await request.save();
+    res.json({ success: true, message: "Request sent successfully" });
+  } catch (error) {
+    console.error("Request error:", error);
+    res.status(500).json({ success: false, message: "Failed to send request" });
+  }
+});
+
+// Route to get all admin requests
+app.get("/api/admin/requests", async (req, res) => {
+  try {
+    const requests = await ConnectRequest.find();
+    res.json(requests);
+  } catch (error) {
+    console.error("Error fetching requests:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to fetch requests" });
+  }
+});
+
+// Route to accept an admin request
+app.post("/api/admin/request/:id/accept", async (req, res) => {
+  try {
+    const request = await ConnectRequest.findById(req.params.id);
+    if (!request) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Request not found" });
+    }
+    request.status = "accepted";
+    await request.save();
+    res.json({ success: true, message: "Request accepted" });
+  } catch (error) {
+    console.error("Error accepting request:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to accept request" });
+  }
+});
+
+// Route to refuse an admin request
+app.post("/api/admin/request/:id/refuse", async (req, res) => {
+  try {
+    const request = await ConnectRequest.findById(req.params.id);
+    if (!request) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Request not found" });
+    }
+    request.status = "refused";
+    await request.save();
+    res.json({ success: true, message: "Request refused" });
+  } catch (error) {
+    console.error("Error refusing request:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to refuse request" });
+  }
+});
+
+// Login endpoint
+// Login endpoint
+app.post("/api/admin/login", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await ConnectRequest.findOne({
+      requestUsername: username,
+      requestPassword: password,
+      status: "accepted",
+    });
+    if (user) {
+      res.json({ message: "Login successful", status: user.status });
+    } else {
+      res.json({
+        message: "Invalid username or password or user not accepted",
+      });
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "An error occurred during login" });
+  }
+});
+
+// Route to handle form data submissions
+app.post("/api/data", async (req, res) => {
+  const formData = req.body;
+  try {
+    const newFormData = new FormData(formData);
+    await newFormData.save();
+    res.json({ success: true, message: "Form data submitted successfully" });
+  } catch (error) {
+    console.error("Form data submission error:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to submit form data" });
+  }
+});
+// Add these routes at the end of your file
+
+// Route to get form data statistics
+// Additional statistics endpoints
+// Endpoint to get form data statistics
+app.get("/api/statistics/form-data", async (req, res) => {
+  try {
+    const total = await FormData.countDocuments();
+    const accepted = await FormData.countDocuments({ etat: "affecté" });
+    const refused = await FormData.countDocuments({ etat: "refusé" });
+
+    res.json({ total, accepted, refused });
+  } catch (error) {
+    console.error("Error fetching form data statistics:", error);
+    res.status(500).json({ message: "Failed to fetch form data statistics" });
+  }
+});
+
+// Endpoint to get connect request statistics
+app.get("/api/statistics/connect-requests", async (req, res) => {
+  try {
+    const total = await ConnectRequest.countDocuments();
+    const accepted = await ConnectRequest.countDocuments({
+      status: "accepted",
+    });
+    const refused = await ConnectRequest.countDocuments({ status: "refused" });
+
+    res.json({ total, accepted, refused });
+  } catch (error) {
+    console.error("Error fetching connect request statistics:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch connect request statistics" });
+  }
 });
 
 app.listen(port, () => {

@@ -60,7 +60,12 @@ export default {
         {
           icon: "mdi-chart-areaspline",
           text: "Statistics",
-          path: "/admin/statistics",
+          path: "/admin/admin-statistics",
+        },
+        {
+          icon: "mdi-account-cog",
+          text: "Admin Requests",
+          path: "/admin/admin-requests",
         },
       ],
     };

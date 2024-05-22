@@ -101,12 +101,16 @@
 <script>
 export default {
   data() {
-    return {};
+    return { isAdminRoute: false };
   },
-  computed: {
-    isAdminRoute() {
-      return this.$route.meta.isAdmin; // Checks if the current route has `isAdmin` meta
+
+  watch: {
+    $route(to) {
+      this.isAdminRoute = to.path === "/connect";
     },
+  },
+  mounted() {
+    this.isAdminRoute = this.$route.path === "/connect";
   },
 };
 </script>

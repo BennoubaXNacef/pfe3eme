@@ -11,6 +11,7 @@
   "dependencies": {
     "@mdi/font": "5.9.55",
     "axios": "^1.6.7",
+    "chart.js": "^4.4.3",
     "core-js": "^3.8.3",
     "docxtemplater": "^3.47.2",
     "express": "^4.18.3",
@@ -22,6 +23,7 @@
     "pizzip": "^3.1.7",
     "roboto-fontface": "*",
     "vue": "^3.2.13",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.0.13",
     "vuetify": "^3.6.3",
     "webfontloader": "^1.0.0",

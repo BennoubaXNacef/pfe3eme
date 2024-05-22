@@ -6,7 +6,9 @@ import AdminDashboard from "@/Admin/AdminDashboard.vue";
 import AffectationStagiaire from "@/Admin/AffectationStagiaire.vue";
 import ModeleCNFCPP from "@/Admin/ModeleCNFCPP.vue";
 import AttestationStage from "@/Admin/AttestationStage.vue";
-
+import ConnectAdmin from "../connect/ConnectAdmin.vue";
+import AdminRequests from "@/Admin/AdminRequests.vue";
+import StatistiqueAdmin from "../Admin/StatistiqueAdmin.vue";
 const routes = [
   {
     path: "/",
@@ -22,6 +24,11 @@ const routes = [
     path: "/success",
     name: "Success",
     component: AppSuccess,
+  },
+  {
+    path: "/connect",
+    name: "connection",
+    component: ConnectAdmin,
   },
   {
     path: "/admin",
@@ -44,6 +51,17 @@ const routes = [
         component: AttestationStage,
         name: "AttestationStage",
       },
+      {
+        path: "admin-requests", // a URL-friendly path
+        component: AdminRequests,
+        name: "AdminRequests",
+      },
+      {
+        path: "admin-statistics",
+        component: StatistiqueAdmin,
+        name: "StatistiqueAdmin",
+      },
+
       // other child routes...
     ],
   },
